@@ -59,3 +59,12 @@
 ## Other
 - .gitignore (Git ignore file)
 - README.md (Project documentation)
+
+## Navigating the project
+Run server:
+
+`cd backend`
+
+`npm run dev`
+
+Then, go to browser: localhost:5555
