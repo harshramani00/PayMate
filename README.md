@@ -1,11 +1,10 @@
-# PayMate
+# PayMate - Receipt Scanner & Bill Splitter
 
 *Splitting Bills made easy.*
 
 *Tech Stack*: MongoDB, Express.js, React, Node.js (MERN)
 
-*Code Structure:*
-# 📂 MERN Stack Receipt Scanner & Bill Splitter - Project Structure
+# *Code Structure:*
 
 ## Backend (Node.js + Express.js)
 - backend/
