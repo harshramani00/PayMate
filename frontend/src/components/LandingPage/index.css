@@ -1,0 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
+body{
+    background-color: #5f43b2;
+    margin: 0;
+    font-family: sans-serif;
+
+}
+
+.hero{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.typewriter {
+  font-family: "Montserrat", Arial, sans-serif;
+
+  font-size: 3rem;
+  font-weight: 700;
+  color: #fff;
+
+  text-shadow:
+    0 0 4px rgba(255, 255, 255, 0.7),
+    0 0 10px rgba(255, 255, 255, 0.5);
+
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 0.15em solid #fff;
+
+  width: 0;
+  animation:
+    typing 3s steps(18, end) 0.5s forwards,
+    blink-caret 0.75s step-end infinite;
+}
+  
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: 16.6ch;
+    }
+  }
+  
+  @keyframes blink-caret {
+    50% {
+      border-color: transparent;
+    }
+  }
