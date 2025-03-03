@@ -7,11 +7,21 @@ body{
 
 }
 
-.hero{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #6A38C5; /* Adjust background to match your theme */
+  color: white;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  transition: transform 1s ease-in-out;
+}
+
+.move-up {
+  transform: translateY(-50px);
 }
 
 .typewriter {
@@ -34,18 +44,93 @@ body{
     typing 3s steps(18, end) 0.5s forwards,
     blink-caret 0.75s step-end infinite;
 }
-  
-  @keyframes typing {
-    from {
-      width: 0;
-    }
-    to {
-      width: 16.6ch;
-    }
+
+.catch-phrases{
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-top: 10px;
+  opacity: 0;
+  animation: fadeInOut 3s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(10px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 16.6ch; }
+}
+
+@keyframes blink-caret {
+  50% {
+    border-color: transparent;
   }
-  
-  @keyframes blink-caret {
-    50% {
-      border-color: transparent;
-    }
-  }
+}
+
+.auth-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  padding: 7.5px 25px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 400px;
+  opacity: 0;
+  animation: fadeIn 1.5s ease-in-out forwards;
+}
+
+.auth-option {
+  flex: 1;
+  text-align: center;
+}
+
+.auth-section p {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.divider {
+  width: 2px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.5);
+  margin: 0 15px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.login-btn {
+  background: #ffffff;
+  color: #6A38C5;
+}
+
+.signup-btn {
+  background: #FFD700;
+  color: #6A38C5;
+}
+
+
+.btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
