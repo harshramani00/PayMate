@@ -8,7 +8,11 @@ const SessionSecret = crypto.randomBytes(32).toString("hex");
 
 const { PORT, MONGO_URL, CLIENT_URL, COOKIE_LENGTH } = require("./config.js")
 
-mongoose.connect(MONGO_URL);
+mongoose.connect(MONGO_URL).then(() => {
+    console.log("MongoDB connected");
+}   ).catch((error) => {    
+    console.log("MongoDB connection error:", error);
+});
 
 const app = express()
 
