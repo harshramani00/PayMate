@@ -1,5 +1,6 @@
 import React, {useState, useEffect } from "react";
 import "./index.css"
+import { useNavigate } from 'react-router-dom';
 
 const phrases = [
     "⏳ Save time. Split smarter.",
@@ -15,6 +16,7 @@ const LandingPage = () => {
     const [index, setIndex] = useState(0);
     const [showAuth, setShowAuth] = useState(false);
     const [animateUp, setAnimateUp] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const phraseTimer = setTimeout(() => {
@@ -42,6 +44,10 @@ const LandingPage = () => {
         }
     }, [showPhrases]);
 
+    const handleSignUpClick = () => {
+        navigate('/sign-up');
+      };
+
     return(
         <div className={`hero ${animateUp ? "move-up" : ""}`}>
             <h1 className="typewriter">Welcome to Paymate</h1>
@@ -56,7 +62,7 @@ const LandingPage = () => {
                 <div className="divider"></div>
                 <div className="auth-options">
                     <p>New here? Get started!</p>
-                    <button className="btn signup-btn">Sign Up</button>
+                    <button className="btn signup-btn" onClick={handleSignUpClick}>Sign Up</button>
                 </div>
             </div>
         )}
