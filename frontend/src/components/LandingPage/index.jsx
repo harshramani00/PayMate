@@ -47,6 +47,11 @@ const LandingPage = () => {
     const handleSignUpClick = () => {
         navigate('/sign-up');
       };
+    
+    const handleSignInClick = () => {
+        navigate('/sign-in');
+      };
+
 
     return(
         <div className={`hero ${animateUp ? "move-up" : ""}`}>
@@ -57,7 +62,7 @@ const LandingPage = () => {
             <div className="auth-section">
                 <div className="auth-option">
                     <p>Already with us?</p>
-                    <button className="btn login-btn">Login</button>
+                    <button className="btn login-btn" onClick={handleSignInClick}>Login</button>
                 </div>
                 <div className="divider"></div>
                 <div className="auth-options">
