@@ -1,10 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 
 body{
-    background-color: #5f43b2;
+    background-color: #6A38C5;
     margin: 0;
     font-family: sans-serif;
-
 }
 
 .hero {
@@ -13,7 +12,7 @@ body{
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #6A38C5; /* Adjust background to match your theme */
+  background-color: #6A38C5;
   color: white;
   text-align: center;
   font-family: Arial, sans-serif;
