@@ -82,6 +82,7 @@ A robust system for extracting structured data from receipts using OCR and AI va
 ├── package.json 
 └── README.md 
 
+
 ## 📤 Output
 **Successful Processing**:
 ```json
