@@ -46,10 +46,6 @@ A robust system for extracting structured data from receipts using OCR and AI va
    # Windows
    venv\Scripts\activate
    ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
 
 ## ⚙ Configuration
 1. Create `.env` file in root directory:
