@@ -61,7 +61,7 @@ A robust system for extracting structured data from receipts using OCR and AI va
 - **Supported Formats**: JPG, PNG
 - **Directory**: `/data`
 - **Example Structure**:
-  ```
+  
   PayMate/
 ├── ocr_model/
 | | 
@@ -81,7 +81,6 @@ A robust system for extracting structured data from receipts using OCR and AI va
 ├── package-lock.json 
 ├── package.json 
 └── README.md 
-  ```
 
 ## 📤 Output
 **Successful Processing**:
