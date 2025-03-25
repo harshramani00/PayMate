@@ -1,4 +1,3 @@
-```markdown
 # PayMate - Smart Receipt Processor
 
 A robust system for extracting structured data from receipts using OCR and AI validation.
