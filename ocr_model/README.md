@@ -62,25 +62,28 @@ A robust system for extracting structured data from receipts using OCR and AI va
 - **Directory**: `/data`
 - **Example Structure**:
   
-  PayMate/
+<pre>
+<code>
+PayMate/
 ├── ocr_model/
-| | 
-│ ├── data/ 
-│ │ ├── receipt 1.jpg 
-│ │ ├── receipt 2.jpg 
-│ │ └── receipt 3.jpg 
-| |
-│ ├── .env 
-│ ├── .env.example 
-│ └── text_extraction.py 
-|
+│   ├── data/ 
+│   │   ├── receipt 1.jpg 
+│   │   ├── receipt 2.jpg 
+│   │   └── receipt 3.jpg 
+│   ├── .env 
+│   ├── .env.example 
+│   └── text_extraction.py 
+
 ├── frontend/ 
 ├── server/ 
-|
+
 ├── .gitignore 
 ├── package-lock.json 
 ├── package.json 
 └── README.md 
+</code>
+</pre>
+
 
 
 ## 📤 Output
