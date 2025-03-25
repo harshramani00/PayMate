@@ -141,7 +141,3 @@ MIT License - See [LICENSE](LICENSE) for details
 3. Processing time varies (3-15 seconds per receipt)
 4. Supported currencies: USD, EUR, GBP
 
-**Support**: kauch@example.com | [Open Issues](https://github.com/yourusername/PayMate/issues)
-```
-
-Simply copy this entire content into a file named `README.md` in your project root directory. The markdown formatting will render properly on GitHub/GitLab and most code editors.
