@@ -54,6 +54,9 @@ const ReceiptUpload = () => {
             <button className="clear-btn" onClick={handleClear}>
               Clear
             </button>
+            <button className="submit-btn">
+              Submit
+            </button>
           </div>
         )}
       </div>

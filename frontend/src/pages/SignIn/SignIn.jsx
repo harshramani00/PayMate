@@ -48,7 +48,6 @@ export default function SignIn() {
   return (
     <div className="signin-container">
       <h2>Sign In</h2>
-      {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
           type="email"
