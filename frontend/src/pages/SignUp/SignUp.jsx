@@ -78,7 +78,7 @@ export default function SignUp() {
         <button disabled={loading}>
           {loading ? 'Loading...' : 'Sign Up'}
         </button>
-        {/* <OAuth /> */}
+        <OAuth />
       </form>
       <div className="flex">
         <p>Have an account?</p>

@@ -64,10 +64,10 @@ export default function SignIn() {
         <button disabled={loading}>
           {loading ? 'Loading...' : 'Sign In'}
         </button>
-        {/* <OAuth /> */}
+        <OAuth />
       </form>
       <div className="flex">
-        <p>Don't have an account?</p>
+        <p>Dont have an account?</p>
         <Link to="/sign-up">
           <span>Sign up</span>
         </Link>

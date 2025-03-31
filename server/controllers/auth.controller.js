@@ -30,7 +30,7 @@ export const signin = async (req, res, next) => {
     if (!validPassword) return next(errorHandler(401, 'Wrong credentials!'));
 
     console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET); // Debug log
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: validUser._id }, 'paymateneu');
     const { password: pass, ...rest } = validUser._doc;
     
     res
