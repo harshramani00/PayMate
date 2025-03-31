@@ -1,52 +1,80 @@
-const User = require('../models/user.model.js');
-const bcryptjs = require('bcryptjs');
+import User from '../models/user.model.js';
+import bcryptjs from 'bcryptjs';
+import { errorHandler } from '../utils/error.js';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const signup = async (req, res, next) => {
-    console.log('Received signup request:', req.body); // Log the request body
-
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) {
-        console.log('Missing required fields'); // Log missing fields
-        return res.status(400).json({ error: 'All fields are required' });
-    }
-
-    const hashedPassword = bcryptjs.hashSync(password, 10);
-    const newUser = new User({ username, email, password: hashedPassword });
-
-    try {
-        await newUser.save();
-        console.log('User created successfully:', newUser); // Log the created user
-        res.status(201).json('User created successfully!');
-    } catch (error) {
-        next(error);
-    }
-};
-
-const signin = async (req, res) => {
-  console.log('Received signin request:');
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    console.log('Missing required fields'); // Log missing fields
-    return res.status(400).json({ error: 'All fields are required' });
-}
+export const signup = async (req, res, next) => {
+  const { username, email, password } = req.body;
+  const hashedPassword = bcryptjs.hashSync(password, 10);
+  const newUser = new User({ username, email, password: hashedPassword });
   try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ error: 'Invalid email or password' });
-    }
-
-    // Compare passwords
-    const isMatch = await bcryptjs.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid email or password' });
-    }
-
-    res.status(200).json({ message: 'Login successful'});
-
+    await newUser.save();
+    res.status(201).json('User created successfully!');
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    next(error);
   }
 };
 
-module.exports = { signup, signin };
+export const signin = async (req, res, next) => {
+  const { email, password } = req.body;
+  console.log('Signin attempt:', { email }); // Debug log
+  try {
+    const validUser = await User.findOne({ email });
+    console.log('User found:', validUser ? 'yes' : 'no'); // Debug log
+    if (!validUser) return next(errorHandler(404, 'User not found!'));
+
+    const validPassword = bcryptjs.compareSync(password, validUser.password);
+    console.log('Password valid:', validPassword ? 'yes' : 'no'); // Debug log
+    if (!validPassword) return next(errorHandler(401, 'Wrong credentials!'));
+
+    console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET); // Debug log
+    const token = jwt.sign({ id: validUser._id }, 'paymateneu');
+    const { password: pass, ...rest } = validUser._doc;
+    
+    res
+      .cookie('access_token', token, { httpOnly: true })
+      .status(200)
+      .json(rest);
+  } catch (error) {
+    console.error('Signin error:', error); // Debug log
+    next(error);
+  }
+};
+
+export const google = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (user) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const { password: pass, ...rest } = user._doc;
+      res
+        .cookie('access_token', token, { httpOnly: true })
+        .status(200)
+        .json(rest);
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+      const newUser = new User({
+        username:
+          req.body.name.split(' ').join('').toLowerCase() +
+          Math.random().toString(36).slice(-4),
+        email: req.body.email,
+        password: hashedPassword,
+        avatar: req.body.photo,
+      });
+      await newUser.save();
+      const token = jwt.sign({ id: newUser._id }, 'paymateneu');
+      const { password: pass, ...rest } = newUser._doc;
+      res
+        .cookie('access_token', token, { httpOnly: true })
+        .status(200)
+        .json(rest);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
