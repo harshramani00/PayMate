@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Routes, BrowserRouter } from "react-rou
 import LandingPage from "./components/LandingPage";
 import SignUp from "./pages/SignUp/SignUp";
 import SignIn from "./pages/SignIn/SignIn";
-import ReceiptUpload from "./pages/ReceiptUpload/ReceiptUpload"
+import ReceiptUpload from "./pages/ReceiptUpload/ReceiptUpload";
+
 import "./App.css"
 
 function App() {

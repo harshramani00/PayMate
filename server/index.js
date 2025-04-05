@@ -7,10 +7,15 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const { PORT, MONGO_URL, CLIENT_URL, COOKIE_LENGTH } = require('./config.js');
 const userRouter = require('./routes/user.route.js');
 const authRouter = require('./routes/auth.route.js');
+const receiptRouter = require('./routes/receipt.route.js');
+const cookieParser = require('cookie-parser');
+
+
 
 const SessionSecret = crypto.randomBytes(32).toString("hex");
 
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
 
 mongoose.connect(MONGO_URL).then(() => {
@@ -30,6 +35,7 @@ app.use(
         credentials: true,
         origin: [CLIENT_URL],
     }),
+    cookieParser(),
     session({
         secret: SessionSecret,
         resave: false,
@@ -48,6 +54,7 @@ app.listen(PORT, () => {
 
 app.use("/server/user", userRouter);
 app.use("/server/auth", authRouter);
+app.use('/server/receipt', receiptRouter);
 
 
 app.use((err, req, res, next) => {
