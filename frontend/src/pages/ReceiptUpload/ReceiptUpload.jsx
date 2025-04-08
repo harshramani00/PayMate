@@ -21,6 +21,7 @@ const ReceiptUpload = () => {
   };
 
   return (
+    
     <div className="upload-container">
       <h2>Upload Your Receipt</h2>
 
