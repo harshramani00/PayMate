@@ -7,11 +7,13 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const { PORT, MONGO_URL, CLIENT_URL, COOKIE_LENGTH } = require('./config.js');
 const userRouter = require('./routes/user.route.js');
 const authRouter = require('./routes/auth.route.js');
+const cookieParser = require('cookie-parser');
 
 const SessionSecret = crypto.randomBytes(32).toString("hex");
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 mongoose.connect(MONGO_URL).then(() => {
     console.log("MongoDB connected");
