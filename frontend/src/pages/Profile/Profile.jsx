@@ -11,6 +11,12 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
+  signOutUserStart,
+  signOutUserSuccess,
+  signOutUserFailure,
 } from '../../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import './Profile.css';
@@ -61,6 +67,23 @@ export default function Profile() {
     );
   };
 
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/server/user/delete/${currentUser._id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -88,7 +111,19 @@ export default function Profile() {
       dispatch(updateUserFailure(error.message));
     }
   };
-
+  const handleSignOut = async () => {
+    try {
+      const res = await fetch('/server/auth/signout');
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
 
   return (
     <div className="profile-container">
@@ -152,6 +187,21 @@ export default function Profile() {
           {loading ? 'Loading...' : 'Update'}
         </button>
       </form>
+
+      <div className="action-buttons">
+        <span
+          onClick={handleDeleteUser}
+          className="delete-button"
+        >
+          Delete account
+        </span>
+        <span 
+          onClick={handleSignOut} 
+          className="sign-out-button"
+        >
+          Sign out
+        </span>
+      </div>
 
       <p className="error-message">{error ? error : ''}</p>
       <p className="success-message">
