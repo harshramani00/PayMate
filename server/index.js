@@ -10,13 +10,12 @@ const authRouter = require('./routes/auth.route.js');
 const receiptRouter = require('./routes/receipt.route.js');
 const cookieParser = require('cookie-parser');
 
-
-
 const SessionSecret = crypto.randomBytes(32).toString("hex");
 
 const app = express();
 app.use(cookieParser());
 app.use(express.json());
+app.use(cookieParser());
 
 mongoose.connect(MONGO_URL).then(() => {
     console.log("MongoDB connected");
