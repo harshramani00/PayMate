@@ -1,6 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { errorHandler } from './error.js';
-import { JWT_SECRET } from '../config.js';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const verifyToken = (req, res, next) => {
   const token = req.cookies.access_token;

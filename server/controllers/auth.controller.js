@@ -3,8 +3,9 @@ import bcryptjs from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { JWT_SECRET } from '../config.js';
 dotenv.config();
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
