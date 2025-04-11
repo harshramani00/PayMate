@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import './ReceiptUpload.css';
+import { useNavigate } from 'react-router-dom';
 
 const ReceiptUpload = () => {
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('');
+  const [isProcessed, setIsProcessed] = useState(false);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     const uploadedFile = e.target.files[0];
@@ -15,12 +19,16 @@ const ReceiptUpload = () => {
     const fileUrl = URL.createObjectURL(uploadedFile);
     setPreviewUrl(fileUrl);
     setMessage('');
+    setLoadingMessage('');
+    setIsProcessed(false);
   };
 
   const handleClear = () => {
     setFile(null);
     setPreviewUrl(null);
     setMessage('');
+    setLoadingMessage('');
+    setIsProcessed(false);
   };
 
   const handleSubmit = async () => {
@@ -34,18 +42,19 @@ const ReceiptUpload = () => {
 
     try {
       setUploading(true);
+      setLoadingMessage('⏳ Uploading and processing receipt...');
       const res = await fetch('http://localhost:5000/server/receipt/scan-receipt', {
         method: 'POST',
         body: formData,
-        credentials: 'include', // ensures cookies are sent for authentication
+        credentials: 'include',
       });
-      
+
       const data = await res.json();
 
       if (res.ok) {
-        setMessage('✅ Receipt uploaded successfully!');
-        console.log(data);
-        // Optionally navigate to a processing page or show progress bar
+        setMessage('✅ Receipt processed successfully!');
+        console.log(data); // Optional: store data in global state or pass to next page
+        setIsProcessed(true);
       } else {
         setMessage(`❌ Upload failed: ${data.message}`);
       }
@@ -54,11 +63,16 @@ const ReceiptUpload = () => {
       setMessage('❌ Something went wrong. Please try again.');
     } finally {
       setUploading(false);
+      setLoadingMessage('');
     }
   };
 
+  const handleAssignSplits = () => {
+    // TODO: route to assign splits page (can pass receipt ID later)
+    navigate('/assign-splits'); // <-- this assumes you have routing set up
+  };
+
   return (
-    
     <div className="upload-container">
       <h2>Upload Your Receipt</h2>
 
@@ -99,7 +113,14 @@ const ReceiptUpload = () => {
               </button>
             </div>
 
+            {loadingMessage && <p className="loading-message">{loadingMessage}</p>}
             {message && <p className="upload-message">{message}</p>}
+
+            {isProcessed && (
+              <button className="assign-btn" onClick={handleAssignSplits}>
+                Assign Splits
+              </button>
+            )}
           </div>
         )}
       </div>

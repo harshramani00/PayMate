@@ -21,11 +21,15 @@ class ReceiptProcessor:
     def process(self, image_path: Path) -> dict:
         try:
             self.raw_text = self._enhanced_ocr(image_path)
+
+            items = self._ai_item_parser()
+
             return {
                 "store": self._extract_store(),
                 "date": self._parse_date(),
-                "items": self._get_validated_items(),
+                "items": items,
                 "tax": self._extract_tax(),
+                "discount": -self._extract_discount(),
                 "total": self._extract_total(),
                 "currency": "$"
             }
@@ -36,7 +40,9 @@ class ReceiptProcessor:
         """OCR with decimal point protection"""
         img = Image.open(path)
         img = img.convert('L')
-        img = ImageEnhance.Sharpness(img).enhance(2.0)  # Emphasize small dots
+        img = img.filter(ImageFilter.MedianFilter()) # Reduce noise
+        img = ImageEnhance.Contrast(img).enhance(2) # Boost contrast
+        img = ImageEnhance.Sharpness(img).enhance(2)  # Emphasize small dots
         text = pytesseract.image_to_string(img, config='--oem 3 --psm 6')
         return self._clean_text(text)
 
@@ -74,19 +80,27 @@ class ReceiptProcessor:
 
     def _get_validated_items(self) -> list:
         """Price validation with sanity checks"""
+        lines = self.raw_text.splitlines()
         items = []
-        for match in re.finditer(r'(.+?)\s+(\$?\d+\.?\d{0,2})', self.raw_text):
-            name = self._clean_name(match.group(1))
-            price = self._parse_price(match.group(2))
-            
-            # Price sanity checks
-            if price > 1000:  # Likely missing decimal
-                price = price / 100
-            if price < 0.01:  # Invalid price
+
+        for line in lines:
+            line = line.strip()
+            if not line:
                 continue
-                
-            items.append({"name": name, "price": round(price, 2)})
-        
+
+            # Match: <name>  <price> (2+ spaces)
+            match = re.match(r"(.+?)\s{2,}(\$?\d+[.,]?\d{0,2})$", line)
+            if not match:
+                # Fallback: <name> <price> (at least 1 space, price at end)
+                match = re.match(r"(.+?)\s+(\$?\d+[.,]?\d{0,2})$", line)
+
+            if match:
+                name = self._clean_name(match.group(1))
+                price = self._parse_price(match.group(2))
+
+                if 0.01 < price < 1000:  # sanity filter
+                    items.append({"name": name, "price": round(price, 2)})
+
         return items
 
     def _regex_item_parser(self) -> list:
@@ -105,7 +119,7 @@ class ReceiptProcessor:
         """Smart price parsing with error correction"""
         try:
             # Remove non-numeric characters except decimal
-            cleaned = re.sub(r'[^\d.]', '', price_str)
+            cleaned = re.sub(r'[^\d\.-]', '', price_str)
             
             # Handle multiple decimals
             parts = cleaned.split('.')
@@ -121,44 +135,49 @@ class ReceiptProcessor:
             return 0.0
 
     def _ai_item_parser(self) -> list:
-        """AI parsing with strict output validation"""
-        prompt = f"""Extract items from this receipt. Follow exactly:
-1. Output ONLY valid JSON array
-2. Format: [{{"name": "...", "price": x.xx}}]
-3. Fix OCR errors using context
-4. Prices must match text values
+        prompt = f"""You are given raw OCR text from a grocery receipt.
 
-Text:
-{self.raw_text}"""
+        Your task is to extract only the **purchased items**, along with their **final paid price** (after any adjustments or discounts).
+
+        ✔ INCLUDE:
+        - Food, groceries, household items
+        - Final price paid per item (after adjustment/discount)
+        - One entry per purchased product
+
+        ❌ DO NOT include:
+        - Weight references (e.g. "5 lb", "10.0 lb", etc.)
+        - Original crossed-out prices
+        - Subtotals, tax, fee, service fee, checkout, or total
+        - Discounts, store credits, coupons, or promotions — they will be handled separately and **must NOT appear as items**
+
+        Output must be a **valid JSON array** in this format:
+        [
+        {{ "name": "Item Name", "price": x.xx }},
+        ...
+        ]
+
+        Only return the JSON, nothing else.
+
+        Receipt text:
+        {self.raw_text}
+        """
 
         try:
             response = self.client.chat.completions.create(
                 model="gpt-4",
                 messages=[{"role": "user", "content": prompt}],
-                temperature=0.1
+                temperature=0.2
             )
-            json_str = response.choices[0].message.content
-            
-            # Clean JSON response
-            json_str = json_str.split('```json')[-1].split('```')[0].strip()
+            json_str = response.choices[0].message.content.strip()
+
+            # Auto-clean for embedded JSON
+            if "```json" in json_str:
+                json_str = json_str.split("```json")[-1].split("```")[0].strip()
+
             return json.loads(json_str)
         except Exception as e:
             raise RuntimeError(f"AI parsing failed: {str(e)}")
 
-    def _cross_validate_items(self, items: list) -> list:
-        """Ensure items match original text"""
-        validated = []
-        for item in items:
-            # Find matching line in raw text
-            match = re.search(
-                fr'{re.escape(item["name"])}.*?{self.price_pattern}',
-                self.raw_text,
-                re.IGNORECASE
-            )
-            if match:
-                item["price"] = self._parse_price(match.group(1))
-                validated.append(item)
-        return validated
 
     def _validate_total(self, items: list) -> bool:
         """Check if items sum matches total"""
@@ -171,21 +190,37 @@ Text:
 
     def _extract_total(self) -> float:
         """Reliable total extraction"""
-        total_match = re.search(
-            fr'Total\D*({self.price_pattern})',
-            self.raw_text,
-            re.IGNORECASE
-        )
-        return self._parse_price(total_match.group(1)) if total_match else 0.0
+        for line in self.raw_text.splitlines()[::-1]:  # search from bottom up
+            if "total" in line.lower():
+                match = re.search(self.price_pattern, line)
+                if match:
+                    return self._parse_price(match.group(1))
+        return 0.0
 
     def _extract_tax(self) -> float:
-        """Tax amount extraction"""
-        tax_match = re.search(
-            fr'Tax\D*({self.price_pattern})',
-            self.raw_text,
-            re.IGNORECASE
-        )
-        return self._parse_price(tax_match.group(1)) if tax_match else 0.0
+        total_tax = 0.0
+        keywords = ["tax", "fee"]
+
+        for line in self.raw_text.splitlines():
+            if any(keyword in line.lower() for keyword in keywords):
+                match = re.search(self.price_pattern, line)
+                if match:
+                    total_tax += self._parse_price(match.group(1))
+
+        return round(total_tax, 2)
+    
+    def _extract_discount(self) -> float:
+        total_discount = 0.0
+        keywords = ["discount", "credit", "coupon", "promotion", "rebate", "offer"]
+
+        for line in self.raw_text.splitlines():
+            if any(keyword in line.lower() for keyword in keywords):
+                match = re.search(self.price_pattern, line)
+                if match:
+                    amount = self._parse_price(match.group(1))
+                    total_discount += amount  # Keep as positive number
+
+        return round(total_discount, 2)
 
     def _parse_date(self) -> str:
         """Flexible date parsing"""
@@ -217,8 +252,14 @@ Text:
         return re.sub(r'\b(?:price|total|tax)\b', '', name, flags=re.IGNORECASE).strip()
 
 if __name__ == "__main__":
+    import sys
     load_dotenv()
+
+    if len(sys.argv) < 2:
+        print(json.dumps({"error": "No image path provided"}))
+        sys.exit(1)
+
+    image_path = Path(sys.argv[1])
     processor = ReceiptProcessor()
-    receipt_path = Path(__file__).parent / "data" / "receipt 2.jpg"
-    result = processor.process(receipt_path)
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    result = processor.process(image_path)
+    print(json.dumps(result))  # Final result printed to stdout
