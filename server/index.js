@@ -9,6 +9,7 @@ const userRouter = require('./routes/user.route.js');
 const authRouter = require('./routes/auth.route.js');
 const receiptRouter = require('./routes/receipt.route.js');
 const cookieParser = require('cookie-parser');
+const processedReceiptRouter = require('./routes/processedReceipt.route.js');
 
 const SessionSecret = crypto.randomBytes(32).toString("hex");
 
@@ -51,6 +52,7 @@ app.listen(PORT, () => {
 app.use("/server/user", userRouter);
 app.use("/server/auth", authRouter);
 app.use('/server/receipt', receiptRouter);
+app.use("/server/receipt", processedReceiptRouter)
 
 
 app.use((err, req, res, next) => {

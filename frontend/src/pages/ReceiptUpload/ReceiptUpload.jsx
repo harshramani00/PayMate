@@ -9,6 +9,8 @@ const ReceiptUpload = () => {
   const [loadingMessage, setLoadingMessage] = useState('');
   const [isProcessed, setIsProcessed] = useState(false);
   const [message, setMessage] = useState('');
+  const [receiptId, setReceiptId] = useState(null);
+
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
@@ -54,6 +56,7 @@ const ReceiptUpload = () => {
       if (res.ok) {
         setMessage('✅ Receipt processed successfully!');
         console.log(data); // Optional: store data in global state or pass to next page
+        setReceiptId(data._id);
         setIsProcessed(true);
       } else {
         setMessage(`❌ Upload failed: ${data.message}`);
@@ -68,9 +71,13 @@ const ReceiptUpload = () => {
   };
 
   const handleAssignSplits = () => {
-    // TODO: route to assign splits page (can pass receipt ID later)
-    navigate('/assign-splits'); // <-- this assumes you have routing set up
+    if (receiptId) {
+      navigate(`/assign-splits/${receiptId}`); // ✅ pass the ID in the URL
+    } else {
+      setMessage('Could not locate receipt ID');
+    }
   };
+  
 
   return (
     <div className="upload-container">

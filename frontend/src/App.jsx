@@ -8,6 +8,7 @@ import "./App.css"
 import Profile from "./pages/Profile/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from './components/Header/Header';
+import AssignSplits from "./pages/AssignSplits/AssignSplits";
 
 
 function App() {
@@ -23,6 +24,12 @@ function App() {
           <>
             <Header />
             <ReceiptUpload />
+          </>
+        } />
+        <Route path="/assign-splits/:id" element={
+          <>
+            <Header />
+            <AssignSplits />
           </>
         } />
         
