@@ -30,16 +30,35 @@
   }
   
   .assign-box input[type="text"] {
-    width: 100%;
+    width: 95%;
+    display: inline-block;
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ccc;
     font-size: 1rem;
     margin-bottom: 1.5rem;
   }
+
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
   
+  .item-name {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #e7f6f2;
+  }
+
+  .item-price {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #e7f6f2;
+  }
+
   .item-block {
-    text-align: left;
     background-color: #11474c;
     border-radius: 8px;
     padding: 1rem;
@@ -53,6 +72,7 @@
   }
   
   .checkbox-group {
+    padding-top: 5px;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -75,4 +95,48 @@
   .checkbox-group label:hover {
     background-color: #f0e68c;
   }
+
+  .store-date-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
   
+  .store-date-row .input-group {
+    flex: 1;
+    min-width: 45%;
+  }
+  
+  .input-group label {
+    display: block;
+    font-weight: 500;
+    color: #bbe4e9;
+    margin-bottom: 0.3rem;
+  }
+  
+  .input-group input {
+    width: 90%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  
+  
+  .summary-item {
+    background-color: #093941; /* slightly darker to visually separate summary */
+  }
+  .summary-section {
+    margin-top: 2rem;
+    text-align: left;
+    background-color: #11474c;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  
+  .summary-section p {
+    margin: 0.4rem 0;
+    font-size: 1rem;
+    color: #bbe4e9;
+  }

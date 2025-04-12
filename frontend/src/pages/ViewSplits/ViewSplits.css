@@ -1,0 +1,81 @@
+.view-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #155263;
+    border-radius: 16px;
+    color: #bbe4e9;
+    text-align: center;
+  }
+  
+  .split-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .split-table th,
+  .split-table td {
+    padding: 12px;
+    border: 1px solid #bbe4e9;
+    font-size: 1rem;
+  }
+  
+  .split-table th {
+    background-color: #11474c;
+    color: #ffffff;
+  }
+  
+  .split-table tfoot td {
+    font-weight: bold;
+    background-color: #11474c;
+    color: #ffffff; /* Darker top border */
+  }
+
+  .download-btn {
+    margin-top: 20px;
+    background-color: #feffdf;
+    color: #155263;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .download-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+  }
+
+  .itemized-table {
+    margin-top: 30px;
+  }
+  
+  .itemized-table h3 {
+    color: #bbe4e9;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+  
+  .itemized-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .itemized-table th,
+  .itemized-table td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: center;
+  }
+  
+  .itemized-table th {
+    background-color: #155263;
+    color: #fff;
+  }
+  
+  
+  

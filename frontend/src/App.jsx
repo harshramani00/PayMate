@@ -9,7 +9,7 @@ import Profile from "./pages/Profile/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from './components/Header/Header';
 import AssignSplits from "./pages/AssignSplits/AssignSplits";
-
+import ViewSplits from "./pages/ViewSplits/ViewSplits";
 
 function App() {
   return (
@@ -30,6 +30,13 @@ function App() {
           <>
             <Header />
             <AssignSplits />
+          </>
+        } />
+
+        <Route path="/view-splits/:splitId" element={
+          <>
+            <Header />
+            <ViewSplits />
           </>
         } />
         

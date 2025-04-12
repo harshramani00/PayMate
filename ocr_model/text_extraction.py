@@ -29,6 +29,7 @@ class ReceiptProcessor:
                 "date": self._parse_date(),
                 "items": items,
                 "tax": self._extract_tax(),
+                "tip": self._extract_tip(),
                 "discount": -self._extract_discount(),
                 "total": self._extract_total(),
                 "currency": "$"
@@ -221,6 +222,19 @@ class ReceiptProcessor:
                     total_discount += amount  # Keep as positive number
 
         return round(total_discount, 2)
+    
+    def _extract_tip(self) -> float:
+        total_tip = 0.0
+        keywords = ["tip", "gratuity"]
+
+        for line in self.raw_text.splitlines():
+            if any(keyword in line.lower() for keyword in keywords):
+                match = re.search(self.price_pattern, line)
+                if match:
+                    amount = self._parse_price(match.group(1))
+                    total_tip += amount
+
+        return round(total_tip, 2)
 
     def _parse_date(self) -> str:
         """Flexible date parsing"""
@@ -241,7 +255,7 @@ class ReceiptProcessor:
             self.raw_text,
             re.IGNORECASE
         )
-        return store_match.group(1).strip() if store_match else "Unknown Store"
+        return store_match.group(1).strip() if store_match else ""
 
     def _detect_currency(self) -> str:
         """Currency symbol detection"""

@@ -15,6 +15,7 @@ const processedReceiptSchema = new mongoose.Schema({
     },
   ],
   tax: Number,
+  tip: Number,
   discount: Number,
   total: Number,
   currency: {
