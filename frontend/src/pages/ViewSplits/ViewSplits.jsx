@@ -23,88 +23,112 @@ const ViewSplits = () => {
 
   const downloadPDF = () => {
     const doc = new jsPDF();
-
     const store = splitData?.receipt?.store || 'Unknown Store';
     const date = splitData?.receipt?.date || 'Unknown Date';
-
+    const { splits, itemizedSplits } = splitData;
+    const people = Object.keys(splits);
+  
     doc.setFontSize(16);
     doc.text(`Split Summary - ${store}`, 14, 18);
     doc.setFontSize(12);
     doc.text(`Date: ${date}`, 14, 26);
-
-    const { splits, itemizedSplits } = splitData;
-
-    const tableData = Object.entries(splits).map(([name, values]) => [
-      name,
-      values.itemsTotal.toFixed(2),
-      values.tax.toFixed(2),
-      values.tip?.toFixed(2) || '0.00',
-      `-${Math.abs(values.discount).toFixed(2)}`,
-      values.total.toFixed(2),
-    ]);
-
-    const totals = ['Total'].concat(
-      ['itemsTotal', 'tax', 'tip', 'discount', 'total'].map(key =>
-        Object.values(splits).reduce((acc, v) => acc + v[key], 0).toFixed(2)
-      )
-    );
-
+  
+    const headers = ['Item', ...people, 'Total ($)'];
+  
+    const itemRows = itemizedSplits.map(entry => {
+      const row = [entry.itemName];
+      let total = 0;
+      const personMap = {};
+      entry.shares?.forEach(({ person, amount }) => {
+        personMap[person] = amount;
+        total += amount;
+      });
+  
+      people.forEach(name => {
+        row.push((personMap[name] || 0).toFixed(2));
+      });
+  
+      row.push(total.toFixed(2));
+      return row;
+    });
+  
+    // Special rows with highlighting logic
+    const highlightRowKeys = ['tax', 'tip', 'discount'];
+    const specialRows = highlightRowKeys.map(key => {
+      const label = key.charAt(0).toUpperCase() + key.slice(1);
+      const row = [label];
+      let rowTotal = 0;
+  
+      people.forEach(name => {
+        let val = splits[name][key] || 0;
+        if (key === 'discount') val = -Math.abs(val);
+        rowTotal += val;
+        row.push(val.toFixed(2));
+      });
+  
+      row.push(rowTotal.toFixed(2));
+      return { row, key };
+    });
+  
+    const totalRow = (() => {
+      const row = ['Total'];
+      let rowTotal = 0;
+  
+      people.forEach(name => {
+        const val = splits[name].total || 0;
+        rowTotal += val;
+        row.push(val.toFixed(2));
+      });
+  
+      row.push(rowTotal.toFixed(2));
+      return row;
+    })();
+  
+    const body = [...itemRows, ...specialRows.map(s => s.row)];
+  
     autoTable(doc, {
-      startY: 30,
-      head: [['Person', 'Items Total ($)', 'Tax ($)', 'Tip ($)', 'Discount ($)', 'Total ($)']],
-      body: tableData,
-      foot: [totals],
+      startY: 32,
+      head: [headers],
+      body: body,
+      foot: [totalRow],
       theme: 'grid',
+      styles: {
+        halign: 'center',
+        fontSize: 11,
+        lineColor: [0, 0, 0], // darker borders
+        lineWidth: 0.5,
+      },
       headStyles: {
         fillColor: [21, 82, 99],
         textColor: 255,
       },
       footStyles: {
-        fillColor: [230, 240, 245],
-        textColor: 20,
+        fillColor: [225, 235, 245],
+        textColor: 0,
         fontStyle: 'bold',
-        lineWidth: 0.3,
-        lineColor: [40, 40, 40],
       },
-      styles: {
-        halign: 'center',
-        fontSize: 11,
-        lineColor: [80, 80, 80],
-        lineWidth: 0.2,
+      didParseCell: function (data) {
+        // Highlight special rows (tax, tip, discount)
+        const label = data.row.raw?.[0];
+  
+        if (['Tax', 'Tip', 'Discount'].includes(label)) {
+          data.cell.styles.fillColor = [210, 236, 240]; // soft blue
+          data.cell.styles.textColor = [0, 0, 0];
+          data.cell.styles.fontStyle = 'bold';
+        }
       },
     });
-
-    // ➕ Add itemized breakdown
-    if (itemizedSplits && itemizedSplits.length > 0) {
-      doc.addPage();
-      doc.setFontSize(14);
-      doc.text('Item-wise Breakdown', 14, 18);
-
-      const itemTable = [];
-      itemizedSplits.forEach(entry => {
-        entry.assignedTo.forEach((person, idx) => {
-          itemTable.push([entry.itemName, person, entry.amounts[idx].toFixed(2)]);
-        });
-      });
-
-      autoTable(doc, {
-        startY: 25,
-        head: [['Item', 'Person', 'Amount ($)']],
-        body: itemTable,
-        theme: 'grid',
-        styles: { halign: 'center', fontSize: 11 },
-      });
-    }
-
+  
     doc.setFontSize(10);
     doc.text('Automated by PayMate.', 14, doc.lastAutoTable.finalY + 10);
-
     doc.save('split-summary.pdf');
   };
+  
 
   if (!splitData) return <div className="view-container"><h2>Loading split...</h2></div>;
 
   const { splits, receipt, itemizedSplits } = splitData;
+  const people = Object.keys(splits);
 
   return (
     <div className="view-container">
@@ -118,66 +142,63 @@ const ViewSplits = () => {
         <table>
           <thead>
             <tr>
-              <th>Person</th>
-              <th>Items Total ($)</th>
-              <th>Tax ($)</th>
-              <th>Tip ($)</th>
-              <th>Discount ($)</th>
-              <th><strong>Total ($)</strong></th>
+              <th>Item</th>
+              {people.map(name => <th key={name}>{name}</th>)}
+              <th>Total ($)</th>
             </tr>
           </thead>
           <tbody>
-            {Object.entries(splits).map(([name, values]) => (
-              <tr key={name}>
-                <td>{name}</td>
-                <td>{values.itemsTotal.toFixed(2)}</td>
-                <td>{values.tax.toFixed(2)}</td>
-                <td>{values.tip?.toFixed(2) || '0.00'}</td>
-                <td>{values.discount.toFixed(2)}</td>
-                <td><strong>{values.total.toFixed(2)}</strong></td>
-              </tr>
-            ))}
+            {itemizedSplits.map((entry, i) => {
+              const rowMap = {};
+              let total = 0;
+              entry.shares?.forEach(({ person, amount }) => {
+                rowMap[person] = amount;
+                total += amount;
+              });
+
+              return (
+                <tr key={i}>
+                  <td>{entry.itemName}</td>
+                  {people.map(person => (
+                    <td key={person}>{(rowMap[person] || 0).toFixed(2)}</td>
+                  ))}
+                  <td>{total.toFixed(2)}</td>
+                </tr>
+              );
+            })}
+
+            {['tax', 'tip', 'discount'].map(label => {
+              const labelName = label.charAt(0).toUpperCase() + label.slice(1);
+              const values = people.map(p => {
+                let val = splits[p][label] || 0;
+                return label === 'discount' ? -Math.abs(val) : val;
+              });
+              const rowTotal = values.reduce((a, b) => a + b, 0);
+
+              return (
+                <tr key={label} className="highlight-row">
+                  <td><strong>{labelName}</strong></td>
+                  {values.map((val, idx) => (
+                    <td key={idx}>{val.toFixed(2)}</td>
+                  ))}
+                  <td><strong>{rowTotal.toFixed(2)}</strong></td>
+                </tr>
+              );
+            })}
           </tbody>
           <tfoot>
-            <tr>
+            <tr className="total-footer">
               <td><strong>Total</strong></td>
-              <td>{Object.values(splits).reduce((acc, v) => acc + v.itemsTotal, 0).toFixed(2)}</td>
-              <td>{Object.values(splits).reduce((acc, v) => acc + v.tax, 0).toFixed(2)}</td>
-              <td>{Object.values(splits).reduce((acc, v) => acc + v.tip, 0).toFixed(2)}</td>
-              <td>{Object.values(splits).reduce((acc, v) => acc + v.discount, 0).toFixed(2)}</td>
-              <td><strong>{Object.values(splits).reduce((acc, v) => acc + v.total, 0).toFixed(2)}</strong></td>
+              {people.map(name => (
+                <td key={name}><strong>{(splits[name].total || 0).toFixed(2)}</strong></td>
+              ))}
+              <td><strong>{
+                Object.values(splits).reduce((acc, v) => acc + v.total, 0).toFixed(2)
+              }</strong></td>
             </tr>
           </tfoot>
         </table>
       </div>
-
-      {/* Item-wise breakdown display */}
-      {itemizedSplits && (
-        <div className="itemized-table">
-          <h3>Detailed Item-wise Split</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Person</th>
-                <th>Amount ($)</th>
-              </tr>
-            </thead>
-            <tbody>
-            {itemizedSplits.map((entry, i) =>
-            entry.shares.map((share, idx) => (
-              <tr key={`${i}-${share.person}`}>
-                <td>{entry.itemName}</td>
-                <td>{share.person}</td>
-                <td>{share.amount.toFixed(2)}</td>
-              </tr>
-            ))
-          )}
-
-            </tbody>
-          </table>
-        </div>
-      )}
 
       <button className="download-btn" onClick={downloadPDF}>Download PDF</button>
     </div>

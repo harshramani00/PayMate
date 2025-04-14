@@ -30,7 +30,7 @@ export default function Header() {
     <header className="header">
       <div className="header-container">
         <Link to='/' className="logo">
-          PayMateNEU
+          PayMate
         </Link>
 
         <form onSubmit={handleSubmit} className="search-form">
@@ -47,7 +47,8 @@ export default function Header() {
         </form>
 
         <nav className="nav-links">
-          <Link to='/' className="nav-link">Home</Link>
+          <Link to='/scan-receipt' className="nav-link">Upload</Link>
+          <Link to='/history' className="nav-link">History</Link>
           <Link to='/about' className="nav-link">About</Link>
           <Link to='/profile' className="nav-link">
             {currentUser ? (

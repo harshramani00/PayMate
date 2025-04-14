@@ -1,81 +1,86 @@
 .view-container {
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: #155263;
-    border-radius: 16px;
-    color: #bbe4e9;
-    text-align: center;
-  }
-  
-  .split-table table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .split-table th,
-  .split-table td {
-    padding: 12px;
-    border: 1px solid #bbe4e9;
-    font-size: 1rem;
-  }
-  
-  .split-table th {
-    background-color: #11474c;
-    color: #ffffff;
-  }
-  
-  .split-table tfoot td {
-    font-weight: bold;
-    background-color: #11474c;
-    color: #ffffff; /* Darker top border */
-  }
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #155263;
+  border-radius: 16px;
+  color: #bbe4e9;
+  text-align: center;
+}
 
-  .download-btn {
-    margin-top: 20px;
-    background-color: #feffdf;
-    color: #155263;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s ease-in-out;
-  }
-  
-  .download-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
-  }
+.view-container h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
 
-  .itemized-table {
-    margin-top: 30px;
-  }
-  
-  .itemized-table h3 {
-    color: #bbe4e9;
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-  }
-  
-  .itemized-table table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  
-  .itemized-table th,
-  .itemized-table td {
-    border: 1px solid #ccc;
-    padding: 8px 12px;
-    text-align: center;
-  }
-  
-  .itemized-table th {
-    background-color: #155263;
-    color: #fff;
-  }
-  
-  
-  
+.view-container p {
+  font-size: 1.2rem;
+  color: #f4f7f5;
+  margin-bottom: 20px;
+}
+
+.split-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #000000;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #000; /* outer border */
+}
+
+.split-table th,
+.split-table td {
+  padding: 12px;
+  border: 1px solid #000; /* darker border like in PDF */
+  font-size: 1rem;
+  text-align: center;
+  color: #11474c;
+}
+
+.split-table th {
+  background-color: #11474c;
+  color: #ffffff;
+}
+
+.split-table tbody tr:nth-child(even):not(.highlight-row) {
+  background-color: #f3fafa;
+}
+
+.split-table tbody tr:nth-child(odd):not(.highlight-row) {
+  background-color: #e8f1f1;
+}
+
+/* ✨ Highlight tax, tip, discount */
+.split-table .highlight-row {
+  background-color: #d2ecf0 !important;
+  font-weight: bold;
+  color: #000;
+}
+
+/* ✨ Highlight Total row in footer */
+.split-table tfoot .total-footer {
+  background-color: #e1edf4;
+  font-weight: bold;
+  color: #000;
+  border-top: 2px solid #000;
+}
+
+.download-btn {
+  margin-top: 25px;
+  background-color: #feffdf;
+  color: #155263;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.download-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+}

@@ -31,6 +31,17 @@ router.get('/:splitId', verifyToken, async (req, res) => {
   }
 });
 
+// Get all splits for the currently logged-in user
+router.get('/user/me', verifyToken, async (req, res) => {
+  try {
+    const splits = await SplitAssignment.find({ userId: req.user.id }).populate('receiptId');
+    res.status(200).json(splits);
+  } catch (err) {
+    console.error('Error fetching user split history:', err);
+    res.status(500).json({ message: 'Failed to fetch split history' });
+  }
+});
+
 
 
 module.exports = router;

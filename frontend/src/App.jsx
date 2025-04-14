@@ -10,6 +10,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import Header from './components/Header/Header';
 import AssignSplits from "./pages/AssignSplits/AssignSplits";
 import ViewSplits from "./pages/ViewSplits/ViewSplits";
+import History from "./pages/History/History";
+import About from "./pages/About/About";
 
 function App() {
   return (
@@ -39,6 +41,22 @@ function App() {
             <ViewSplits />
           </>
         } />
+
+        <Route path="/history" element={
+          <>
+            <Header />
+            <History />
+          </>
+        } />
+
+        <Route path="/about" element={
+          <>
+            <Header />
+            <About />
+          </>
+        } />
+        
+        
         
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />
