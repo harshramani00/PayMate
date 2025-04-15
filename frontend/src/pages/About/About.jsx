@@ -30,10 +30,6 @@ export default function About() {
           You can upload a receipt, assign items to people, and we’ll handle the math — including tax, tip, and discounts — so you don’t have to.
         </p>
       </div>
-
-      <div className="footer-note">
-        Made with ☕ and collaboration ✨
-      </div>
     </div>
   );
 }
