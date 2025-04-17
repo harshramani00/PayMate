@@ -22,32 +22,42 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />
         
+
+        <Route element={<PrivateRoute />}>       
         <Route path="/scan-receipt" element={
           <>
             <Header />
             <ReceiptUpload />
           </>
         } />
+        </Route>
+
+        <Route element={<PrivateRoute />}> 
         <Route path="/assign-splits/:id" element={
           <>
             <Header />
             <AssignSplits />
           </>
         } />
+        </Route>
 
+        <Route element={<PrivateRoute />}> 
         <Route path="/view-splits/:splitId" element={
           <>
             <Header />
             <ViewSplits />
           </>
         } />
+        </Route>
 
+        <Route element={<PrivateRoute />}> 
         <Route path="/history" element={
           <>
             <Header />
             <History />
           </>
         } />
+        </Route>
 
         <Route path="/about" element={
           <>
@@ -55,8 +65,6 @@ function App() {
             <About />
           </>
         } />
-        
-        
         
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={
