@@ -1,6 +1,6 @@
 .upload-container {
   max-width: 500px;
-  margin: 50px auto;
+  margin: 125px auto;
   padding: 30px;
   border-radius: 16px;
   background-color: #155263;
@@ -74,4 +74,28 @@ h2 {
 .submit-btn:hover {
   transform: scale(1.1);
   box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 600px) {
+  .upload-container {
+    margin: 200px auto;
+  }
+
+  .assign-container {
+    padding-top: 80px; /* match header height on mobile */
+  }
+
+  .store-date-row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .store-date-row .input-group {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .input-group input {
+    width: 100%;
+  }
 }

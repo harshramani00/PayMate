@@ -135,3 +135,45 @@ body{
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+@media (max-width: 600px) {
+  .hero {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .typewriter {
+    font-size: 2rem;
+    text-align: center;
+    width: 100%;
+    animation:
+      typing 3s steps(18, end) 0.5s forwards,
+      blink-caret 0.75s step-end infinite;
+  }
+
+  .catch-phrases {
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 10px auto;
+  }
+
+  .auth-section {
+    flex-direction: column;
+    width: 90%;
+    padding: 15px;
+  }
+
+  .divider {
+    width: 80%;
+    height: 1px;
+    margin: 15px 0;
+  }
+
+  .btn {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+}

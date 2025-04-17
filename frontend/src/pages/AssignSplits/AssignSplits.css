@@ -1,6 +1,6 @@
 .assign-container {
     max-width: 600px;
-    margin: 50px auto;
+    margin: 125px auto;
     padding: 30px;
     border-radius: 16px;
     background-color: #155263;
@@ -140,3 +140,49 @@
     font-size: 1rem;
     color: #bbe4e9;
   }
+
+  .assign-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+  }
+  
+  .action-btn {
+    background-color: #ffe156;
+    color: #155263;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .action-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.3);
+  }
+
+  .simple-toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffe156;
+    color: #155263;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 999;
+    animation: fadein 0.3s ease-in-out;
+  }
+  
+  @keyframes fadein {
+    from { opacity: 0; transform: translate(-50%, -10px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+  }
+  
+  

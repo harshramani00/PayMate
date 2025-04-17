@@ -12,6 +12,9 @@ const AssignSplits = () => {
   const [finalizing, setFinalizing] = useState(false);
   const [storeOverride, setStoreOverride] = useState('');
   const [dateOverride, setDateOverride] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState('');
+
 
   useEffect(() => {
     const fetchReceipt = async () => {
@@ -125,6 +128,50 @@ const AssignSplits = () => {
         </div>
       </div>
 
+      <div className="assign-actions">
+        <button
+          className="action-btn"
+          onClick={() => {
+            if (peopleList.length === 0) {
+              setToastMsg('Please enter names of people involved before assigning.');
+              setShowToast(true);
+              setTimeout(() => setShowToast(false), 3000); // auto-dismiss after 3 seconds
+
+              return;
+            }
+            const updated = {};
+            receipt.items.forEach((_, index) => {
+              updated[index] = [...peopleList]; // assign all people to each item
+            });
+            setAssignments(updated);
+            setErrorMessage('');
+          }}
+        >
+          Assign All
+        </button>
+
+        <button
+          className="action-btn"
+          onClick={() => {
+            if (peopleList.length === 0) {
+              setToastMsg('Please enter names of people involved before assigning.');
+              setShowToast(true);
+              setTimeout(() => setShowToast(false), 3000); // auto-dismiss after 3 seconds
+
+              return;
+            }
+            const cleared = {};
+            receipt.items.forEach((_, index) => {
+              cleared[index] = [];
+            });
+            setAssignments(cleared);
+            setErrorMessage('');
+          }}
+        >
+          Clear All
+        </button>
+      </div>
+
 
         <div className="item-list">
           {receipt.items.map((item, index) => (
@@ -190,6 +237,12 @@ const AssignSplits = () => {
         </button>
 
       </div>
+      {showToast && (
+        <div className="simple-toast">
+          {toastMsg}
+        </div>
+      )}
+
     </div>
   );
 };
