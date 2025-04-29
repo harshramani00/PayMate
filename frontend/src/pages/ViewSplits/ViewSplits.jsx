@@ -133,7 +133,7 @@ const ViewSplits = () => {
   return (
     <div className="view-container">
       <h2>Final Split Summary</h2>
-      <p style={{ color: '#bbe4e9', marginBottom: '10px' }}>
+      <p>
         <strong>Store:</strong> {receipt?.store || 'Unknown Store'} &nbsp;&nbsp;
         <strong>Date:</strong> {receipt?.date || 'N/A'}
       </p>

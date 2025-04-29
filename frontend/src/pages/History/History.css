@@ -2,16 +2,17 @@
     max-width: 500px;
     margin: 125px auto;
     padding: 20px;
-    background-color: #155263;
+    background-color: #CFD8DC;
+    border-style: solid;
+    border-color: #263238;
     border-radius: 12px;
-    color: #bbe4e9;
   }
   
   .history-container h2 {
     text-align: center;
     font-size: 1.8rem;
     margin-bottom: 20px;
-    color: #ffffff;
+    color: #263238;
   }
   
   .history-list {
@@ -22,13 +23,13 @@
   .history-item {
     margin: 10px 0;
     padding: 10px;
-    background-color: #e8f1f1;
+    background-color: #3B5A78;
     border-radius: 6px;
   }
   
   .history-item a {
     text-decoration: none;
-    color: #155263;
+    color: #FFFFFF;
     font-weight: bold;
 
     display: flex;

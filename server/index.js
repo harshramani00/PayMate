@@ -30,20 +30,22 @@ const store = new MongoDBStore({
 
 app.use(
     cors({
+        origin: CLIENT_URL,
         credentials: true,
-        origin: [CLIENT_URL],
-    }),
-    cookieParser(),
-    session({
-        secret: SessionSecret,
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-            maxAge: COOKIE_LENGTH
-        },
-        store: store,
     })
 );
+
+app.use(cookieParser());
+
+app.use(session({
+    secret: SessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: COOKIE_LENGTH
+    },
+    store: store,
+}));
 
 
 app.listen(PORT, () => {

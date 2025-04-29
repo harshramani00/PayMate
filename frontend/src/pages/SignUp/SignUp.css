@@ -5,14 +5,16 @@
     margin: 50px auto;
     padding: 30px;
     border-radius: 16px;
-    background-color: #155263;
+    background-color: #CFD8DC;
+    border-style: solid;
+    border-color: #263238;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
   .signup-container h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #bbe4e9
+    color: #263238;
   }
   
   .signup-container .error {
@@ -35,8 +37,8 @@
   
   .signup-container button {
     padding: 10px;
-    background-color: #feffdf;
-    color: #155263;
+    background-color: #3B5A78;
+    color: #FFFFFF;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -63,7 +65,7 @@
   
   .signup-container .flex p {
     margin: 0;
-    color: #bbe4e9;
+    color: #263238;
   }
   
   .signup-container .flex a {

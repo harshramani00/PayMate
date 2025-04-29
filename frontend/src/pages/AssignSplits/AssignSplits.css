@@ -3,20 +3,21 @@
     margin: 125px auto;
     padding: 30px;
     border-radius: 16px;
-    background-color: #155263;
+    background-color: #CFD8DC;
+    border-style: solid;
+    border-color: #263238;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     text-align: center;
-    color: #bbe4e9;
   }
   
   .assign-container h2 {
     margin-bottom: 1rem;
-    color: #bbe4e9;
+    color: #263238;
   }
   
   .assign-box {
-    background-color: #155263;
-    border: 2px dashed #ccc;
+    background-color: #CFD8DC;
+    border: 2px dashed #263238;
     border-radius: 12px;
     padding: 1.5rem;
     margin-top: 1rem;
@@ -42,24 +43,26 @@
   .item-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 0.6rem;
   }
   
   .item-name {
+    flex-grow: 1;
+    text-align: left;
     font-weight: 600;
     font-size: 1.05rem;
-    color: #e7f6f2;
+    color: #FFFFFF;
   }
 
   .item-price {
     font-weight: 600;
     font-size: 1rem;
-    color: #e7f6f2;
+    color: #FFFFFF;
   }
 
   .item-block {
-    background-color: #11474c;
+    background-color: #2A3D45;
     border-radius: 8px;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -79,8 +82,8 @@
   }
   
   .checkbox-group label {
-    background-color: #feffdf;
-    color: #155263;
+    background-color: #CFD8DC;
+    color: #263238;
     padding: 6px 12px;
     border-radius: 6px;
     font-weight: 600;
@@ -93,7 +96,7 @@
   }
   
   .checkbox-group label:hover {
-    background-color: #f0e68c;
+    background-color: #B0BEC5;
   }
 
   .store-date-row {
@@ -111,7 +114,7 @@
   .input-group label {
     display: block;
     font-weight: 500;
-    color: #bbe4e9;
+    color: #263238;
     margin-bottom: 0.3rem;
   }
   
@@ -123,10 +126,10 @@
     font-size: 1rem;
   }
   
-  
   .summary-item {
-    background-color: #093941; /* slightly darker to visually separate summary */
+    background-color: #395B64;
   }
+
   .summary-section {
     margin-top: 2rem;
     text-align: left;
@@ -138,7 +141,7 @@
   .summary-section p {
     margin: 0.4rem 0;
     font-size: 1rem;
-    color: #bbe4e9;
+    color: #263238;
   }
 
   .assign-actions {
@@ -150,8 +153,8 @@
   }
   
   .action-btn {
-    background-color: #ffe156;
-    color: #155263;
+    background-color: #3B5A78;
+    color: #FFFFFF;
     border: none;
     padding: 0.6rem 1.2rem;
     font-weight: 600;

@@ -3,34 +3,36 @@
   margin: 125px auto;
   padding: 30px;
   border-radius: 16px;
-  background-color: #155263;
+  background-color: #CFD8DC;
+  border-style: solid;
+  border-color: #263238;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
 h2 {
   margin-bottom: 1rem;
-  color: #bbe4e9;
+  color: #263238;
 }
 
 .upload-box {
-  border: 2px dashed #ccc;
+  border: 2px dashed #888;
   border-radius: 12px;
   padding: 2rem;
-  background-color: #155263;
+  background-color: #CFD8DC;
   transition: border-color 0.3s ease;
 }
 
 .upload-label {
   cursor: pointer;
-  color: #bbe4e9;
+  color: #263238;
   font-weight: 500;
   display: inline-block;
   padding: 1rem;
 }
 
 .upload-box:hover {
-  border-color: #888;
+  border-color: #263238;
 }
 
 .preview img {
@@ -41,8 +43,8 @@ h2 {
 
 .clear-btn,
 .assign-btn {
-  background-color: #feffdf;
-  color: #155263;
+  background-color: #3B5A78;
+  color: #FFFFFF;
   border: none;
   padding: 0.5rem 1.2rem;
   margin-top: 5px;
@@ -59,8 +61,8 @@ h2 {
 }
 
 .submit-btn {
-  background-color: #feffdf;
-  color: #155263;
+  background-color: #3B5A78;
+  color: #FFFFFF;
   border: none;
   padding: 0.5rem 1.2rem;
   margin-top: 5px;
@@ -82,7 +84,7 @@ h2 {
   }
 
   .assign-container {
-    padding-top: 80px; /* match header height on mobile */
+    padding-top: 80px;
   }
 
   .store-date-row {

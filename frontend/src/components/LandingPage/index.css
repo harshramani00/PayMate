@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 
 body{
-    background-color: #bbe4e9;
+    background-color: #F5F5F5;
     margin: 0;
     font-family: sans-serif;
 }
@@ -27,7 +27,7 @@ body{
 
   font-size: 3rem;
   font-weight: 700;
-  color: #155263;
+  color: #263238;
 
   text-shadow:
     0 0 4px rgba(255, 255, 255, 0.7),
@@ -35,7 +35,7 @@ body{
 
   white-space: nowrap;
   overflow: hidden;
-  border-right: 0.15em solid #155263;
+  border-right: 0.15em solid #263238;
 
   width: 0;
   animation:
@@ -48,7 +48,7 @@ body{
   font-weight: 500;
   margin-top: 10px;
   opacity: 0;
-  color: #155263;
+  color: #263238;
   animation: fadeInOut 3s ease-in-out infinite;
 }
 
@@ -76,8 +76,10 @@ body{
   align-items: center;
   margin-top: 40px;
   padding: 7.5px 25px 20px;
-  background-color: #155263;
+  background-color: #CFD8DC;
   border-radius: 10px;
+  border-style: solid;
+  border-color: #263238;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
   width: 450px;
@@ -94,7 +96,7 @@ body{
     font-size: 1.2rem;
     font-weight: 500;
     margin-bottom: 15px;
-    color: #bbe4e9;
+    color: #263238;
     
 }
 
@@ -116,13 +118,13 @@ body{
 }
 
 .login-btn {
-  background: #feffdf;
-  color: #155263;
+  background: #3B5A78;
+  color: #FFFFFF;
 }
 
 .signup-btn {
-  background: #feffdf;
-  color: #155263;
+  background: #3B5A78;
+  color: #FFFFFF;
 }
 
 

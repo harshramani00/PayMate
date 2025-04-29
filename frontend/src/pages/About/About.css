@@ -2,9 +2,11 @@
     max-width: 800px;
     margin: 125px auto;
     padding: 40px 30px;
-    background-color: #155263;
+    background-color: #CFD8DC;
+    border-style: solid;
+    border-color: #263238;
     border-radius: 16px;
-    color: #e8f1f1;
+    color: #263238;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
   }
@@ -13,14 +15,14 @@
     text-align: center;
     font-size: 2.5rem;
     margin-bottom: 10px;
-    color: #e8f1f1;
+    color: #263238;
   }
   
   .subtext {
     text-align: center;
     font-size: 1.1rem;
     margin-bottom: 30px;
-    color: #e8f1f1;
+    color: #263238;
   }
   
   .section {
@@ -30,7 +32,7 @@
   .section h2 {
     font-size: 1.6rem;
     margin-bottom: 10px;
-    color: #e8f1f1;
+    color: #263238;
   }
   
   .section p {
