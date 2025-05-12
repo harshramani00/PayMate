@@ -4,6 +4,24 @@ const ProcessedReceipt = require('../models/processedReceipt.model');
 const SplitAssignment = require('../models/splitAssignment.model');
 const { verifyToken } = require('../utils/verifyUser');
 
+// Helper to split amounts proportionally while preserving total
+function proportionalSplit(total, amounts) {
+  const totalBase = amounts.reduce((a, b) => a + b, 0);
+  const raw = amounts.map(a => (total * a) / totalBase);
+
+  let rounded = raw.map(val => parseFloat(val.toFixed(2)));
+  let sumRounded = rounded.reduce((a, b) => a + b, 0);
+  let diff = parseFloat((total - sumRounded).toFixed(2));
+
+  if (Math.abs(diff) > 0) {
+    const remainders = raw.map((val, i) => ({ i, rem: val - rounded[i] }));
+    remainders.sort((a, b) => Math.abs(b.rem) - Math.abs(a.rem));
+    rounded[remainders[0].i] = parseFloat((rounded[remainders[0].i] + diff).toFixed(2));
+  }
+
+  return rounded;
+}
+
 router.get('/processed-receipts/:id', verifyToken, async (req, res) => {
   try {
     const receipt = await ProcessedReceipt.findById(req.params.id);
@@ -22,7 +40,6 @@ router.post('/save-splits/:receiptId', verifyToken, async (req, res) => {
 
     if (!receipt) return res.status(404).json({ message: 'Receipt not found' });
 
-    // Allow manual override for store and date
     if (store) receipt.store = store;
     if (date) receipt.date = date;
     await receipt.save();
@@ -31,7 +48,7 @@ router.post('/save-splits/:receiptId', verifyToken, async (req, res) => {
     const splits = {};
     const itemSplits = [];
 
-    // Validate + initialize
+    // Validate + collect people
     receipt.items.forEach((item, index) => {
       const assigned = assignments[index];
       if (!assigned || assigned.length === 0) {
@@ -44,7 +61,7 @@ router.post('/save-splits/:receiptId', verifyToken, async (req, res) => {
       splits[p] = { itemsTotal: 0, tax: 0, tip: 0, discount: 0, total: 0 };
     });
 
-    // Split item costs & track itemSplits
+    // Calculate item splits
     receipt.items.forEach((item, index) => {
       const assigned = assignments[index];
       const share = parseFloat((item.price / assigned.length).toFixed(2));
@@ -67,32 +84,22 @@ router.post('/save-splits/:receiptId', verifyToken, async (req, res) => {
       itemSplits.push(splitEntry);
     });
 
-    // Total item sum for proportional distribution
-    const totalItems = Object.values(splits).reduce((acc, p) => acc + p.itemsTotal, 0);
+    const peopleList = Array.from(people);
+    const itemTotals = peopleList.map(p => splits[p].itemsTotal);
 
-    // Apply tax proportionally
-    for (const person in splits) {
-      const proportion = splits[person].itemsTotal / totalItems;
-      splits[person].tax = parseFloat((receipt.tax * proportion).toFixed(2));
-    }
+    // Apply tax, tip, discount using corrected split
+    const taxShares = proportionalSplit(receipt.tax, itemTotals);
+    const tipShares = proportionalSplit(receipt.tip, itemTotals);
+    const discountShares = proportionalSplit(receipt.discount, itemTotals);
 
-    // Apply tip proportionally
-    for (const person in splits) {
-      const proportion = splits[person].itemsTotal / totalItems;
-      splits[person].tip = parseFloat((receipt.tip * proportion).toFixed(2));
-    }
-
-    // Apply discount proportionally
-    for (const person in splits) {
-      const proportion = splits[person].itemsTotal / totalItems;
-      splits[person].discount = parseFloat((receipt.discount * proportion).toFixed(2));
-    }
-
-    // Final total per person
-    for (const person in splits) {
-      const s = splits[person];
-      s.total = parseFloat((s.itemsTotal + s.tax + s.tip + s.discount).toFixed(2));
-    }
+    peopleList.forEach((p, i) => {
+      splits[p].tax = taxShares[i];
+      splits[p].tip = tipShares[i];
+      splits[p].discount = discountShares[i];
+      splits[p].total = parseFloat(
+        (splits[p].itemsTotal + splits[p].tax + splits[p].tip + splits[p].discount).toFixed(2)
+      );
+    });
 
     const saved = await SplitAssignment.create({
       userId: req.user.id,
