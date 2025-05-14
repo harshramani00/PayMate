@@ -83,12 +83,3 @@ npm install
 npm start
 ```
 
----
-
-## Conlusion
-For questions or collaboration, feel free to email us:
-
-- [Dhruv Belai](mailto:belai.d@northeastern.edu)  
-- [Aditya Bhanwadiya](mailto:bhanwadiya.a@northeastern.edu)  
-- [Kaustubh Chaudhari](mailto:chaudhari.kau@northeastern.edu)
-
